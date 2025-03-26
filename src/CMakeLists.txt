@@ -1,5 +1,5 @@
 # CMakeList.txt : CMake project for the src directory, include source and define project specific logic here.
-cmake_minimum_required(VERSION 3.31)
+cmake_minimum_required(VERSION 3.30)
 
 # Status messages for important global definitions
 message(STATUS "C++ LSEG PoC")
