@@ -8,7 +8,7 @@ list(APPEND CMAKE_PREFIX_PATH $ENV{HOME}/.local/${CMAKE_BUILD_TYPE})
 # Project configuration and description
 project(
   "C++ LSEG"
-  DESCRIPTION "C++ LSEG Proof Of Concept"
+  DESCRIPTION "C++ LSEG Playground"
   LANGUAGES C CXX)
 
 message(STATUS ${PROJECT_DESCRIPTION})
@@ -49,3 +49,11 @@ message(STATUS "Operating system name ${CMAKE_HOST_SYSTEM_NAME}")
 
 # Include sub-projects
 add_subdirectory("src")
+
+# Include test-packages and configure unit tests
+if(${BUILD_TESTING})
+  include(CTest)
+  include(GoogleTest)
+  enable_testing()
+  add_subdirectory("test_package")
+endif()

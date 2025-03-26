@@ -15,13 +15,24 @@ RUN apt update && apt install -y \
     software-properties-common \
     curl \
     wget \
-    git \
     apt-transport-https \
     zip \
     unzip \
     tzdata \
     build-essential \
-    cmake
+    debconf-utils \
+    gdb \
+    ninja-build \
+    cmake \
+    git \
+    clang-tidy \
+    clang-format \
+    manpages-dev \
+    python3-pip \
+    python-is-python3 \
+    pylint \
+    python3-autopep8 \
+    gcovr
 
 # Create a non-root user to use if preferred - see https://aka.ms/vscode-remote/containers/non-root-user
 ARG TARGET_USER
@@ -29,11 +40,16 @@ RUN useradd -s /bin/bash -m ${TARGET_USER} \
     && echo ${TARGET_USER} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${TARGET_USER} \
     && chmod 0440 /etc/sudoers.d/${TARGET_USER}
 
-# Switch to the non-root user
+# Switch to the non-root user    
 USER ${TARGET_USER}
 
-# Set environment variables for Go
-#ENV PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+# Set the default locale to UTF-8
+ENV LANG C.UTF-8
+ENV LANGUAGE C.UTF-8
+ENV LC_ALL C.UTF-8
+
+# Set the timezone to Europe/Berlin
+ENV TZ=Europe/Berlin
 
 # Set the default shell to bash rather than sh
 ENV SHELL=/bin/bash

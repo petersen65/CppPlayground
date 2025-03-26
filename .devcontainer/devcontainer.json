@@ -12,10 +12,6 @@
 			"TARGET_USER": "vscode"
 		}
 	},
-	"runArgs": [
-		"-e",
-		"TZ=Europe/Berlin"
-	],
 	"customizations": {
 		"vscode": {
 			"extensions": [

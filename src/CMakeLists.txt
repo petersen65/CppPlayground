@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.30)
 
 # Status messages for important global definitions
-message(STATUS "C++ LSEG PoC")
+message(STATUS "C++ LSEG")
 message(STATUS "Using source path ${CMAKE_CURRENT_SOURCE_DIR}")
 
 # Search for required packages
