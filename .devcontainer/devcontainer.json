@@ -19,7 +19,6 @@
 				"github.copilot",
 				"github.copilot-chat",
 				"ms-vscode.cpptools-extension-pack",
-				"xaver.clang-format",
 				"cheshirekow.cmake-format"
 			]
 		}

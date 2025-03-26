@@ -2,7 +2,7 @@
 C++ LSEG Playground
 
 ### Ubuntu with Bash Command Prompt
-cd ~/Source/Repos/CppLsegPlayground
+cd CppLsegPlayground
 rm -rf build CMakeUserPresets.json
 
 ### Conan

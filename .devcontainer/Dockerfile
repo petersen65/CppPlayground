@@ -25,8 +25,6 @@ RUN apt update && \
         gdb \
         ninja-build \
         git \
-        clang-tidy \
-        clang-format \
         manpages-dev \
         python3-pip \
         python-is-python3 \
