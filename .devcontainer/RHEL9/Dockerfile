@@ -6,9 +6,6 @@ ARG ARCHITECTURE=linux/amd64
 ARG BASE_IMG=ubuntu:latest
 FROM --platform=${ARCHITECTURE} ${BASE_IMG}
 
-# Make sure the default shell is bash
-SHELL ["/bin/bash", "-c"]
-
 # Ensure that the system is up to date, and the prerequisites are installed
 RUN dnf update --assumeyes && \
     dnf install --assumeyes \
