@@ -24,7 +24,6 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
   add_compile_options(-Wall -Wextra -pedantic -ferror-limit=5 -ftemplate-backtrace-limit=5)
 else()
   add_compile_options(-Wall -Wextra -pedantic -fmax-errors=5)
-  add_link_options(-static-libgcc -static-libstdc++)
 endif()
 
 # Determine number of CPU cores
