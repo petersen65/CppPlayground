@@ -6,6 +6,11 @@ ARG ARCHITECTURE=linux/amd64
 ARG BASE_IMG=ubuntu:latest
 FROM --platform=${ARCHITECTURE} ${BASE_IMG}
 
+RUN dnf install -y \
+        sudo \
+        ncurses-base && \
+    dnf clean all
+
 # Ensure that the system is up to date, and the prerequisites are installed
 # RUN apt update && \
 #     apt install -y \
@@ -35,9 +40,9 @@ FROM --platform=${ARCHITECTURE} ${BASE_IMG}
 
 # Create a non-root user to use if preferred - see https://aka.ms/vscode-remote/containers/non-root-user
 ARG TARGET_USER
-RUN useradd -s /bin/bash -m ${TARGET_USER} \
-    && echo ${TARGET_USER} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${TARGET_USER} \
-    && chmod 0440 /etc/sudoers.d/${TARGET_USER}
+RUN useradd -s /bin/bash -m ${TARGET_USER} && \
+    echo "${TARGET_USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/${TARGET_USER} && \
+    chmod 0440 /etc/sudoers.d/${TARGET_USER}
 
 # Switch to the non-root user    
 USER ${TARGET_USER}
