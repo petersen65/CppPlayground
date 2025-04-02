@@ -6,6 +6,9 @@ ARG ARCHITECTURE=linux/amd64
 ARG BASE_IMG=ubuntu:latest
 FROM --platform=${ARCHITECTURE} ${BASE_IMG}
 
+# Make sure the default shell is bash
+SHELL ["/bin/bash", "-c"]
+
 # Ensure that the system is up to date, and the prerequisites are installed
 RUN apt update && \
     apt install -y \
@@ -27,11 +30,7 @@ RUN apt update && \
         git \
         manpages-dev \
         python3-pip \
-        python-is-python3 \
-        pylint \
-        python3-autopep8 \  
-        gcovr && \
-    apt-get purge --yes --auto-remove cmake
+        python-is-python3
 
 # Create a non-root user to use if preferred - see https://aka.ms/vscode-remote/containers/non-root-user
 ARG TARGET_USER
@@ -56,9 +55,10 @@ ENV DOCKER_BUILDKIT=1
 ENV COMPOSE_DOCKER_CLI_BUILD=1
 
 # Install Conan C++ package manager and CMake
-RUN pip install --break-system-packages --upgrade pip
-RUN pip install --break-system-packages conan cmake coloredlogs cmake_format
-RUN $HOME/.local/bin/conan profile detect
+RUN mkdir --parents $HOME/.local/bin $HOME/source/repos && \
+    pip install --break-system-packages --upgrade pip && \
+    pip install --break-system-packages conan cmake coloredlogs cmake_format && \
+    $HOME/.local/bin/conan profile detect
 
 # Set the default shell to bash rather than sh
 ENV SHELL=/bin/bash
