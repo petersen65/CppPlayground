@@ -3,12 +3,16 @@
 
 # Start from a given base image with CPU architecture 'amd64'
 ARG ARCHITECTURE=linux/amd64
-ARG BASE_IMG=redhat/ubi9:latest
+ARG BASE_IMG=centos:centos7
 FROM --platform=${ARCHITECTURE} ${BASE_IMG}
 
+# Switch to the CentOS Vault Repository because the CentOS 7 repositories are no longer available
+RUN sed -i "s|^mirrorlist=|#mirrorlist=|g" /etc/yum.repos.d/CentOS-*.repo && \
+    sed -i "s|^#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g" /etc/yum.repos.d/CentOS-*.repo
+
 # Ensure that the system is up to date, and the prerequisites are installed
-RUN dnf update --assumeyes && \
-    dnf install --assumeyes \
+RUN yum update --assumeyes && \
+    yum install --assumeyes \
         sudo \
         ncurses \
         ca-certificates \
@@ -24,9 +28,7 @@ RUN dnf update --assumeyes && \
         gdb \
         ninja-build \
         git \
-        python3 \
-        python3-pip \
-        alternatives --set python /usr/bin/python3
+        cmake
 
 # Create a non-root user to use if preferred - see https://aka.ms/vscode-remote/containers/non-root-user
 ARG TARGET_USER
@@ -37,11 +39,6 @@ RUN useradd -s /bin/bash -m ${TARGET_USER} && \
 # Switch to the non-root user    
 USER ${TARGET_USER}
 
-# Set the default locale to UTF-8
-ENV LANG=C.UTF-8
-ENV LANGUAGE=C.UTF-8
-ENV LC_ALL=C.UTF-8
-
 # Set the timezone to Europe/Berlin
 ENV TZ=Europe/Berlin
 
@@ -50,11 +47,8 @@ ENV DOCKER_HIDE_LEGACY_COMMANDS=ON
 ENV DOCKER_BUILDKIT=1
 ENV COMPOSE_DOCKER_CLI_BUILD=1
 
-# Install Conan C++ package manager and CMake
-RUN mkdir --parents $HOME/.local/bin $HOME/source/repos && \
-    pip install --upgrade pip && \
-    pip install conan cmake coloredlogs cmake_format && \
-    $HOME/.local/bin/conan profile detect
+# Create some directories for development
+RUN mkdir --parents $HOME/.local/bin $HOME/source/repos
 
 # Set the default shell to bash rather than sh
 ENV SHELL=/bin/bash
