@@ -10,7 +10,7 @@ find_package(Threads MODULE REQUIRED)
 
 # Declare target, source files, and dependencies
 set(TARGET_APPLICATION "cpp_playground")
-set(SOURCECODE_FILES "cpp_playground.cpp")
+set(SOURCECODE_FILES "Playground.cpp" "Account.cpp")
 set(OTHER_DEPENDENCIES "Threads::Threads")
 
 # Main executable that contains the binary target

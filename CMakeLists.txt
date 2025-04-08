@@ -13,7 +13,7 @@ project(
 
 message(STATUS ${PROJECT_DESCRIPTION})
 
-# Compiler options for LLVM Clang, AppleClang and all other GNU Compiler Collection like compilers
+# Compiler options for LLVM Clang, Apple Clang and all other GNU Compiler Collection like compilers
 set(BUILD_SHARED_LIBS FALSE)
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
