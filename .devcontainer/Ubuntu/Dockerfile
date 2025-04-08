@@ -7,8 +7,8 @@ ARG BASE_IMG=ubuntu:latest
 FROM --platform=${ARCHITECTURE} ${BASE_IMG}
 
 # Ensure that the system is up to date, and the prerequisites are installed
-RUN apt update && \
-    apt install -y \
+RUN apt-get update && \
+    apt-get install -y \
         sudo \
         lsb-release \
         ca-certificates \
