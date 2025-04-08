@@ -1,13 +1,13 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/cpp
 {
-	"name": "C++ LSEG Ubuntu",
+	"name": "C++ Ubuntu",
 	"dockerFile": "Dockerfile",
 	"containerUser": "vscode",
 	"context": ".",
 	"build": {
 		"args": {
-			"ARCHITECTURE": "linux/amd64",
+			"ARCHITECTURE": "linux/arm64",
 			"BASE_IMG": "ubuntu:24.10",
 			"TARGET_USER": "vscode"
 		}

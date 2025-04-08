@@ -1,8 +1,8 @@
 # Configures the development container for the project
 # syntax=docker/dockerfile:1
 
-# Start from a given base image with CPU architecture 'amd64'
-ARG ARCHITECTURE=linux/amd64
+# Start from a given base image with CPU architecture 'arm64'
+ARG ARCHITECTURE=linux/arm64
 ARG BASE_IMG=ubuntu:latest
 FROM --platform=${ARCHITECTURE} ${BASE_IMG}
 

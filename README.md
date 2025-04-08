@@ -1,8 +1,8 @@
-# CppLsegPlayground
-C++ LSEG Playground
+# CppPlayground
+C++ Playground
 
 ### Ubuntu with Bash Command Prompt
-cd CppLsegPlayground
+cd CppPlayground
 rm -rf build CMakeUserPresets.json
 
 ### Conan

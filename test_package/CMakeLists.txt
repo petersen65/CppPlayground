@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.30)
 
 # Status messages for important global definitions
-message(STATUS "C++ LSEG Unittests")
+message(STATUS "C++ Playground Unittests")
 message(STATUS "Using source path ${CMAKE_CURRENT_SOURCE_DIR}")
 
 # Search for required packages using MODULE mode
@@ -10,8 +10,8 @@ find_package(Threads MODULE REQUIRED)
 find_package(GTest MODULE REQUIRED)
 
 # Declare target, source files, and dependencies
-set(TARGET_TESTS "cpp_lseg_test")
-set(SOURCECODE_FILES "cpp_lseg_test.cpp")
+set(TARGET_TESTS "cpp_playground_test")
+set(SOURCECODE_FILES "cpp_playground_test.cpp")
 set(TEST_DEPENDENCIES "GTest::gtest_main" "GTest::gtest" "GTest::gmock")
 set(OTHER_DEPENDENCIES "Threads::Threads")
 

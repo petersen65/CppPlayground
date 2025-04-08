@@ -2,9 +2,9 @@
 
 #include <gtest/gtest.h>
 
-namespace cpp_lseg {
+namespace cpp_playground {
 namespace testing {
 namespace {
 }
 }  // namespace testing
-}  // namespace cpp_lseg
+}  // namespace cpp_playground

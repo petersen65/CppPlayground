@@ -1,5 +1,5 @@
 # CMakeList.txt : Top-level CMake project file, do global configuration and include sub-projects here.
-cmake_minimum_required(VERSION 3.30)
+cmake_minimum_required(VERSION 4.0)
 
 # Needs to be done before project
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
@@ -7,18 +7,16 @@ list(APPEND CMAKE_PREFIX_PATH $ENV{HOME}/.local/${CMAKE_BUILD_TYPE})
 
 # Project configuration and description
 project(
-  "C++ LSEG"
-  DESCRIPTION "C++ LSEG Playground"
+  "C++"
+  DESCRIPTION "C++ Playground"
   LANGUAGES C CXX)
 
 message(STATUS ${PROJECT_DESCRIPTION})
 
-# Compiler options for MSVC, LLVM Clang, AppleClang and all other GNU Compiler Collection like compilers
+# Compiler options for LLVM Clang, AppleClang and all other GNU Compiler Collection like compilers
 set(BUILD_SHARED_LIBS FALSE)
 
-if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-  add_compile_options(/W4)
-elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
   add_compile_options(-Wall -Wextra -pedantic -ferror-limit=5 -ftemplate-backtrace-limit=5)
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
   add_compile_options(-Wall -Wextra -pedantic -ferror-limit=5 -ftemplate-backtrace-limit=5)
@@ -42,7 +40,6 @@ message(STATUS "Using C++ extensions ${CMAKE_CXX_EXTENSIONS}")
 message(STATUS "Using C++ required standard ${CMAKE_CXX_STANDARD_REQUIRED}")
 message(STATUS "Using C++ compiler ${CMAKE_CXX_COMPILER_ID}")
 message(STATUS "Using CPU architecture ${CMAKE_HOST_SYSTEM_PROCESSOR}")
-message(STATUS "MSVC runtime library flags are selected by an abstraction ${CMAKE_POLICY_DEFAULT_CMP0091}")
 message(STATUS "Number of CPU cores ${NPROC}")
 message(STATUS "Operating system name ${CMAKE_HOST_SYSTEM_NAME}")
 
