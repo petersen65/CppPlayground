@@ -1,7 +1,7 @@
 #include "Account.h"
 
 banking::Account::Account(int id, double balance)
-    : id{id}, balance{balance}
+    : id(id), balance(balance)
 {
 }
 
