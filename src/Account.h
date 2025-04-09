@@ -16,4 +16,4 @@ namespace banking
         int id;
         double balance;
     };
-} // namespace banking
+}
