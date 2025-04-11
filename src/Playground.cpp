@@ -14,7 +14,7 @@ int main()
     [[maybe_unused]] std::string raw2 = R"Separator(raw string literal with embedded ")Separator";
     [[maybe_unused]] const char8_t *raw3 = u8R"(raw string literal with UTF-8)";
     [[maybe_unused]] const char16_t *raw4 = uR"(raw string literal with UTF-16)";
-    [[maybe_unused]] const char32_t *raw5 = U"(raw string literal with UTF-32)";
+    [[maybe_unused]] const char32_t *raw5 = UR"(raw string literal with UTF-32)";
 
     std::cout << "Hello, C++ Playground!" << std::endl;
     return 0;
