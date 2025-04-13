@@ -8,7 +8,8 @@
 		"args": {
 			"ARCHITECTURE": "linux/arm64",
 			"BASE_IMG": "ubuntu:24.10",
-			"TARGET_USER": "vscode"
+			"TARGET_USER": "vscode",
+			"LLVM_VERSION": "20"
 		}
 	},
 	"customizations": {

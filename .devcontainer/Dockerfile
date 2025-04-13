@@ -10,24 +10,21 @@ FROM --platform=${ARCHITECTURE} ${BASE_IMG}
 RUN apt-get update && \
     apt-get install -y \
         sudo \
-        lsb-release \
-        ca-certificates \
-        gnupg \
-        software-properties-common \
-        curl \
         wget \
-        apt-transport-https \
-        zip \
-        unzip \
-        tzdata \
+        lsb-release \
+        software-properties-common \
         build-essential \
-        debconf-utils \
-        gdb \
-        ninja-build \
         git \
-        manpages-dev \
+        gdb \
         python3-pip \
         python-is-python3
+
+# Install a specific version of LLVM and Clang
+ARG LLVM_VERSION
+RUN wget https://apt.llvm.org/llvm.sh && \
+    chmod +x llvm.sh && \
+    ./llvm.sh "${LLVM_VERSION}" all && \
+    rm llvm.sh
 
 # Create a non-root user to use if preferred - see https://aka.ms/vscode-remote/containers/non-root-user
 ARG TARGET_USER
@@ -52,14 +49,14 @@ ENV DOCKER_HIDE_LEGACY_COMMANDS=ON
 ENV DOCKER_BUILDKIT=1
 ENV COMPOSE_DOCKER_CLI_BUILD=1
 
-# Install Conan C++ package manager and CMake
-RUN mkdir --parents $HOME/.local/bin $HOME/source/repos && \
-    pip install --break-system-packages --upgrade pip && \
-    pip install --break-system-packages conan cmake coloredlogs cmake_format && \
-    $HOME/.local/bin/conan profile detect
-
 # Set the default shell to bash rather than sh
 ENV SHELL=/bin/bash
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
+
+# Install Conan C++ package manager and CMake
+RUN mkdir --parents $HOME/.local/bin $HOME/source/repos && \
+    pip install --break-system-packages --upgrade pip && \
+    pip install --break-system-packages conan cmake coloredlogs cmake_format && \
+    $HOME/.local/bin/conan profile detect
