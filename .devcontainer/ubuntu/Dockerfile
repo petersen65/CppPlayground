@@ -31,11 +31,12 @@ RUN apt-get update && \
 
 # Create a non-root user to use if preferred - see https://aka.ms/vscode-remote/containers/non-root-user
 ARG TARGET_USER
-RUN useradd -s /bin/bash -m ${TARGET_USER} && \
-    echo "${TARGET_USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/${TARGET_USER} && \
-    chmod 0440 /etc/sudoers.d/${TARGET_USER}
+RUN useradd -s /bin/bash -m "${TARGET_USER}" && \
+    echo "${TARGET_USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/"${TARGET_USER}" && \
+    chmod 0440 /etc/sudoers.d/"${TARGET_USER}"
 
 # Switch to the non-root user    
+ARG TARGET_USER
 USER ${TARGET_USER}
 
 # Set the default locale to UTF-8
