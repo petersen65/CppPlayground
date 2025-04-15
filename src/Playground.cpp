@@ -131,6 +131,19 @@ int main()
     delete ps;                                      // deallocate dynamic instance of struct S
     ps = nullptr;                                   // avoid dangling pointer
 
+    // lvalue (short for locator value) refers to an expression that has a name and a location (left side of an assignment)
+    // xvalue (short for expiring value) refers to an expression that is about to be moved from (has name/location but is about to be moved, std::move(x))
+    // prvalue (short for pure right-hand value) refers to an expression that is temporary (no name/location, 42, std::string("Hello"))
+    // rvalue (short for right-hand value) refers to an expression that is temporary or expiring (right side of an assignment, prvalue + xvalue)
+    // glvalue (short for generalized lvalue) refers to an expression that has a name and a location but might not be assignable (lvalue + xvalue)
+
+    // lvalue reference is a reference that can bind to an lvalue: &
+    // rvalue reference is a reference that can bind to an rvalue: &&
+    
+    // reference types
+    [[maybe_unused]] int &lr = i;   // lvalue reference to an integer (reference to integer variable that has a name and a persistent location)
+    [[maybe_unused]] int &&rr = 42; // rvalue reference to an integer (reference to a temporary integer literal that does not have a name or a location)
+
     std::cout << "Hello, C++ Playground!" << std::endl;
     return EXIT_SUCCESS;
 }
