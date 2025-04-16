@@ -1,5 +1,5 @@
 # CMakeList.txt : CMake project for the test_package directory, include source and define project specific logic here.
-cmake_minimum_required(VERSION 3.30)
+cmake_minimum_required(VERSION 4.0)
 
 # Status messages for important global definitions
 message(STATUS "C++ Playground Unittests")

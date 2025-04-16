@@ -1,41 +1,35 @@
-#include <iostream>
 #include <array>
-#include <vector>
-#include <string>
+#include <iostream>
 #include <map>
+#include <string>
+#include <vector>
 
 // function that takes an array as a parameter
-void f([[maybe_unused]] int arr[])
-{
+void f([[maybe_unused]] int arr[]) {
     // arr is a pointer to the first element of the array
 }
 
 // function that takes a 2D array as a parameter
-void g([[maybe_unused]] int arr[][2])
-{
+void g([[maybe_unused]] int arr[][2]) {
     // arr is a pointer to the first element of the 2D array
 }
 
 // function that takes a 3D array as a parameter
-void h([[maybe_unused]] int arr[][2][5])
-{
+void h([[maybe_unused]] int arr[][2][5]) {
     // arr is a pointer to the first element of the 3D array
 }
 
 // function that takes a pointer as a parameter
-void i([[maybe_unused]] int *ptr)
-{
+void i([[maybe_unused]] int *ptr) {
     // ptr is a pointer to an integer
 }
 
 // function that takes a reference as a parameter
-void j([[maybe_unused]] int &ref)
-{
+void j([[maybe_unused]] int &ref) {
     // ref is a reference to an integer
 }
 
-int main()
-{
+int main() {
     // integer types
     [[maybe_unused]] int i = 42;                     // 32-bit signed integer
     [[maybe_unused]] unsigned int ui = 42;           // 32-bit unsigned integer
@@ -75,18 +69,8 @@ int main()
     [[maybe_unused]] bool b = true; // 1-byte boolean
 
     // enum types (scoped and unscoped)
-    enum class ColorClass
-    {
-        Red,
-        Green,
-        Blue
-    };
-    enum Color
-    {
-        Red,
-        Green,
-        Blue
-    };
+    enum class ColorClass { Red, Green, Blue };
+    enum Color { Red, Green, Blue };
     [[maybe_unused]] ColorClass colorClass = ColorClass::Red;
     [[maybe_unused]] Color colorEnum = Red;
 
@@ -116,11 +100,9 @@ int main()
     fp(arr);                            // call function through pointer
 
     // member pointer types
-    struct S
-    {
+    struct S {
         int i;
-        void f([[maybe_unused]] int arr[])
-        {
+        void f([[maybe_unused]] int arr[]) {
             // function implementation
         }
     };
@@ -149,19 +131,19 @@ int main()
     [[maybe_unused]] int &&rr = 42; // rvalue reference to an integer (reference to a temporary integer literal that does not have a name or a location)
 
     // value construction and initialization
-    [[maybe_unused]] int a1 = 42;                                                // value construction (copy initialization)
-    [[maybe_unused]] int a2(42);                                                 // value construction (direct initialization, not recommended due to narrowing conversion)
-    [[maybe_unused]] int a3{42};                                                 // value construction (uniform initialization, no narrowing conversion)
-    [[maybe_unused]] int iarr[3]{1, 2, 3};                                       // C array initialization with initializer list (uniform initialization)
-    [[maybe_unused]] std::array iarr2{1, 2, 3};                                  // C++ array initialization with initializer list (uniform initialization)
-    [[maybe_unused]] std::vector ivec{1, 2, 3};                                  // C++ vector initialization with initializer list (uniform initialization)
-    [[maybe_unused]] std::string str{"Hello"};                                   // C++ string initialization with initializer list (uniform initialization)
+    [[maybe_unused]] int a1 = 42;               // value construction (copy initialization)
+    [[maybe_unused]] int a2(42);                // value construction (direct initialization, not recommended due to narrowing conversion)
+    [[maybe_unused]] int a3{42};                // value construction (uniform initialization, no narrowing conversion)
+    [[maybe_unused]] int iarr[3]{1, 2, 3};      // C array initialization with initializer list (uniform initialization)
+    [[maybe_unused]] std::array iarr2{1, 2, 3}; // C++ array initialization with initializer list (uniform initialization)
+    [[maybe_unused]] std::vector ivec{1, 2, 3}; // C++ vector initialization with initializer list (uniform initialization)
+    [[maybe_unused]] std::string str{"Hello"};  // C++ string initialization with initializer list (uniform initialization)
     [[maybe_unused]] std::map<std::string, int> imap = {{"one", 1}, {"two", 2}}; // C++ map initialization with initializer list (uniform initialization)
 
     // structured bindings (bind arrays, tuples/pairs, non-static public class attributes, and structs to variables)
     [[maybe_unused]] auto [x, y] = std::make_pair(1, 2); // structured binding declaration (C++17, references to temporary)
     [[maybe_unused]] auto [key, value] = *imap.begin();  // structured binding declaration (C++17, references to temporary)
-    [[maybe_unused]] const auto [ca1, ca2, ca3] = iarr;     // structured binding declaration (C++17, const lvalues)
+    [[maybe_unused]] const auto [ca1, ca2, ca3] = iarr;  // structured binding declaration (C++17, const lvalues)
 
     std::cout << "Hello, C++ Playground!" << std::endl;
     return EXIT_SUCCESS;

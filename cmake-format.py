@@ -1,1 +1,1 @@
-line_width = 120
+line_width = 160
