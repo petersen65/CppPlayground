@@ -99,8 +99,8 @@ int main() {
     [[maybe_unused]] int **pp = &p;      // pointer to a pointer to an integer
     [[maybe_unused]] void *vp = nullptr; // generic pointer type
     int *a = nullptr;                    // nullptr is a null pointer constant
-    if (a)                               // pointers are implicitly convertible to bool
-        ;
+    if (a) {                             // pointers are implicitly convertible to bool
+    }
     [[maybe_unused]] void (*fp)(int[]); // function pointer variable declaration
     fp = ::f;                           // use global scope resolution operator to avoid ambiguity with variable 'f'
     fp(arr);                            // call function through pointer
@@ -172,6 +172,8 @@ int main() {
     [[maybe_unused]] const std::type_info &ti = typeid(Acc); // get type information at runtime
     [[maybe_unused]] auto ti_name = ti.name();               // get type name as string
     [[maybe_unused]] auto ti_hash = ti.hash_code();          // get type hash code
+    [[maybe_unused]] auto &ti2 = typeid(AccPtr);             // get type information for pointer
+    [[maybe_unused]] auto &ti3 = typeid(AccRef);             // get type information for reference
 
     std::cout << "Hello, C++ Playground!" << std::endl;
     return EXIT_SUCCESS;
