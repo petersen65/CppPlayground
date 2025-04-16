@@ -1,7 +1,7 @@
 #include "Distance.h"
 
 unit::Distance::Distance(double cm)
-    : cm(cm)
+    : cm{cm}
 {
 }
 

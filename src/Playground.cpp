@@ -1,4 +1,8 @@
 #include <iostream>
+#include <array>
+#include <vector>
+#include <string>
+#include <map>
 
 // function that takes an array as a parameter
 void f([[maybe_unused]] int arr[])
@@ -139,10 +143,25 @@ int main()
 
     // lvalue reference is a reference that can bind to an lvalue: &
     // rvalue reference is a reference that can bind to an rvalue: &&
-    
+
     // reference types
     [[maybe_unused]] int &lr = i;   // lvalue reference to an integer (reference to integer variable that has a name and a persistent location)
     [[maybe_unused]] int &&rr = 42; // rvalue reference to an integer (reference to a temporary integer literal that does not have a name or a location)
+
+    // value construction and initialization
+    [[maybe_unused]] int a1 = 42;                                                // value construction (copy initialization)
+    [[maybe_unused]] int a2(42);                                                 // value construction (direct initialization, not recommended due to narrowing conversion)
+    [[maybe_unused]] int a3{42};                                                 // value construction (uniform initialization, no narrowing conversion)
+    [[maybe_unused]] int iarr[3]{1, 2, 3};                                       // C array initialization with initializer list (uniform initialization)
+    [[maybe_unused]] std::array iarr2{1, 2, 3};                                  // C++ array initialization with initializer list (uniform initialization)
+    [[maybe_unused]] std::vector ivec{1, 2, 3};                                  // C++ vector initialization with initializer list (uniform initialization)
+    [[maybe_unused]] std::string str{"Hello"};                                   // C++ string initialization with initializer list (uniform initialization)
+    [[maybe_unused]] std::map<std::string, int> imap = {{"one", 1}, {"two", 2}}; // C++ map initialization with initializer list (uniform initialization)
+
+    // structured bindings (bind arrays, tuples/pairs, non-static public class attributes, and structs to variables)
+    [[maybe_unused]] auto [x, y] = std::make_pair(1, 2); // structured binding declaration (C++17, references to temporary)
+    [[maybe_unused]] auto [key, value] = *imap.begin();  // structured binding declaration (C++17, references to temporary)
+    [[maybe_unused]] const auto [ca1, ca2, ca3] = iarr;     // structured binding declaration (C++17, const lvalues)
 
     std::cout << "Hello, C++ Playground!" << std::endl;
     return EXIT_SUCCESS;
