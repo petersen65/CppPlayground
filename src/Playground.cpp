@@ -4,6 +4,12 @@
 #include <string>
 #include <vector>
 
+#include "Account.h"
+#include "Distance.h"
+
+using namespace banking;
+using namespace unit;
+
 // function that takes an array as a parameter
 void f([[maybe_unused]] int arr[]) {
     // arr is a pointer to the first element of the array
@@ -134,6 +140,7 @@ int main() {
     [[maybe_unused]] int a1 = 42;               // value construction (copy initialization)
     [[maybe_unused]] int a2(42);                // value construction (direct initialization, not recommended due to narrowing conversion)
     [[maybe_unused]] int a3{42};                // value construction (uniform initialization, no narrowing conversion)
+    [[maybe_unused]] int a4{};                  // value construction (uniform initialization, default value of type)
     [[maybe_unused]] int iarr[3]{1, 2, 3};      // C array initialization with initializer list (uniform initialization)
     [[maybe_unused]] std::array iarr2{1, 2, 3}; // C++ array initialization with initializer list (uniform initialization)
     [[maybe_unused]] std::vector ivec{1, 2, 3}; // C++ vector initialization with initializer list (uniform initialization)
@@ -144,6 +151,27 @@ int main() {
     [[maybe_unused]] auto [x, y] = std::make_pair(1, 2); // structured binding declaration (C++17, references to temporary)
     [[maybe_unused]] auto [key, value] = *imap.begin();  // structured binding declaration (C++17, references to temporary)
     [[maybe_unused]] const auto [ca1, ca2, ca3] = iarr;  // structured binding declaration (C++17, const lvalues)
+
+    // memory classes C++17:
+    //   static, extern, mutable, register
+    //   for local variables, global variables, attributes, functions, and methods
+    //
+    // qualifiers C++17:
+    //   const, constexpr, inline, volatile
+    //   for local variables, global variables, attributes, non-static methods, function parameters, and return values
+
+    // type deduction with auto and decltype
+    [[maybe_unused]] int tdi{5};       // explicit type from declaration
+    [[maybe_unused]] auto tdi2 = 5;    // type deduction from explicit initializer (auto, removes qualifiers and references)
+    [[maybe_unused]] decltype(tdi2) r; // type deduction from expression evaluation at compile time (decltype, keeps qualifiers and references)
+
+    // runtime type information (RTTI)
+    typedef Account Acc;
+    using AccPtr = Acc *;
+    using AccRef = Acc &;
+    [[maybe_unused]] const std::type_info &ti = typeid(Acc); // get type information at runtime
+    [[maybe_unused]] auto ti_name = ti.name();               // get type name as string
+    [[maybe_unused]] auto ti_hash = ti.hash_code();          // get type hash code
 
     std::cout << "Hello, C++ Playground!" << std::endl;
     return EXIT_SUCCESS;
