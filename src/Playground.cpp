@@ -11,17 +11,25 @@ using namespace banking;
 using namespace unit;
 
 // function that takes an array as a parameter
-void f([[maybe_unused]] int arr[]) {
+// noexcept specification is used to indicate that the function does not throw exceptions
+//   compiler can optimize the code better
+//   the caller can assume that it doesn't need to handle exceptions
+//   if the function does throw an exception, the caller should not handle it and the program will terminate
+//
+void f([[maybe_unused]] int arr[]) noexcept {
     // arr is a pointer to the first element of the array
 }
 
 // function that takes a 2D array as a parameter
-void g([[maybe_unused]] int arr[][2]) {
+// at compile time, the compiler knows that the function will throw an exception
+void g([[maybe_unused]] int arr[][2]) noexcept(false) {
     // arr is a pointer to the first element of the 2D array
 }
 
 // function that takes a 3D array as a parameter
-void h([[maybe_unused]] int arr[][2][5]) {
+// at compile time, the compiler knows that the function will not throw an exception if the function "f" is noexcept
+// the noexcept specification uses the "noexcept" operator to check if the function "f" is noexcept
+void h([[maybe_unused]] int arr[][2][5]) noexcept(noexcept(f)) {
     // arr is a pointer to the first element of the 3D array
 }
 
@@ -174,6 +182,25 @@ int main() {
     [[maybe_unused]] auto ti_hash = ti.hash_code();          // get type hash code
     [[maybe_unused]] auto &ti2 = typeid(AccPtr);             // get type information for pointer
     [[maybe_unused]] auto &ti3 = typeid(AccRef);             // get type information for reference
+
+    // exception handling
+    try {
+        // code that may throw an exception
+        throw std::runtime_error("Error occurred"); // value construction of temporary exception object
+    } catch (const std::exception &e) {
+        // catch block for std::exception and derived classes
+        // e is a constant reference to the exception object
+        std::cerr << "Caught exception: " << e.what() << std::endl;
+    } catch (...) {
+        // catch block for all other exceptions
+        std::cerr << "Caught unknown exception" << std::endl;
+    }
+
+    // type traits
+    [[maybe_unused]] bool is_integral = std::is_integral<int>::value;               // check if type is integral
+    [[maybe_unused]] bool is_floating_point = std::is_floating_point<float>::value; // check if type is floating point
+    [[maybe_unused]] bool is_pointer = std::is_pointer<int *>::value;               // check if type is pointer
+    [[maybe_unused]] bool is_reference = std::is_reference<int &>::value;           // check if type is reference
 
     std::cout << "Hello, C++ Playground!" << std::endl;
     return EXIT_SUCCESS;
