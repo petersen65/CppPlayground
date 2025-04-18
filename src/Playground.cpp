@@ -40,13 +40,13 @@ void h([[maybe_unused]] int arr[][2][5]) noexcept(noexcept(f)) {
     // arr is a pointer to the first element of the 3D array
 }
 
-// function that takes a pointer as a parameter
-void i([[maybe_unused]] int *ptr) {
+// function that takes a pointer as a parameter (with default value of nullptr)
+void i([[maybe_unused]] int *ptr = nullptr) {
     // ptr is a pointer to an integer
 }
 
-// function that takes a reference as a parameter
-void j([[maybe_unused]] int &ref) {
+// function that takes a reference as a parameter (with default value of 0)
+void j([[maybe_unused]] const int &ref = {}) {
     // ref is a reference to an integer
 }
 
@@ -224,6 +224,20 @@ int main() {
     namespace ns = std::chrono;                                        // namespace alias for std::chrono
     [[maybe_unused]] ns::duration<int> d1 = ns::seconds(5);            // duration of 5 seconds
     [[maybe_unused]] ns::duration<double> d2 = ns::milliseconds(1000); // duration of 1000 milliseconds
+
+    // lambda functions
+    // [binding] (parameters) -> return_type { body }
+    //   binding: capture by value or reference ([=] for value, [&] for reference, [x] for x by value, [&x] for x by reference)
+    //   parameters: input parameters (optional, can be omitted if no parameters)
+    //   return_type: return type (optional, can be deduced, if deduced the arrow operator must be omitted)
+    //   body: function body (optional, can be empty)
+    //
+    // the binding create a closure that can be described as a function object
+    //   a closure is an object that captures the environment in which it was created
+    //   the closure can be seen as struct on the stack with the captured variables as values or references
+    auto noop = [] {}; // lambda function with no parameters and deduced return type "void" (no parentheses and no arrow operator)
+    auto lambda = [](int x) -> long { return x * 2; }; // lambda function that takes an integer and returns its double as long
+    [[maybe_unused]] long result = lambda(5);          // call lambda function with argument 5
 
     std::cout << "Hello, C++ Playground!" << std::endl;
     return EXIT_SUCCESS;
