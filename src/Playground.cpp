@@ -235,9 +235,26 @@ int main() {
     // the binding create a closure that can be described as a function object
     //   a closure is an object that captures the environment in which it was created
     //   the closure can be seen as struct on the stack with the captured variables as values or references
-    auto noop = [] {}; // lambda function with no parameters and deduced return type "void" (no parentheses and no arrow operator)
+    [[maybe_unused]] auto noop = [] {}; // lambda function with no parameters and deduced return type "void" (no parentheses and no arrow operator)
     auto lambda = [](int x) -> long { return x * 2; }; // lambda function that takes an integer and returns its double as long
     [[maybe_unused]] long result = lambda(5);          // call lambda function with argument 5
+
+    // Generated class member functions by the compiler:
+    //     C++ 03 :
+    //     1) Implicitly-declared Constructor with no args declared as defaulted (generated only if no constructor is declared by user)
+    //     2) Implicitly-declared Copy Constructor (generated only if 5, 6 not declared by user)
+    //     3) Implicitly-declared Copy Assignment operator (generated only if 5, 6 not declared by user)
+    //     4) Implicitly-declared Destructor declared as defaulted (generated if no destructor is declared by user)
+    //
+    //     Since C++ 11:
+    //     5) Move Constructor (generated only if 2, 3, 4, 6 not declared by user)
+    //     6) Move Assignment Operator (generated only if 2, 3, 4, 5 not declared by user)
+
+    // In C++11,
+    //     a) Implicitly-declared Copy Constructor: deprecated if the class has a user-declared copy assignment operator or a user-declared destructor
+    //     b) Implicitly-declared Copy Assignment operator: see (a)
+    //     c) For user-declared Copy/Move Constructors and user-declared Copy/Move Assignments, always declare both Constructors and Assignments
+    //     d) In practice, implicit destructors are noexcept unless the class is "poisoned" by a base or member whose destructor is noexcept(false)
 
     std::cout << "Hello, C++ Playground!" << std::endl;
     return EXIT_SUCCESS;
