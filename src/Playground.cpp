@@ -10,6 +10,13 @@
 using namespace banking;
 using namespace unit;
 
+// unnamed namespace for internal linkage (better alternative to static on global variables and functions)
+// variables and functions declared in an unnamed namespace have internal linkage
+// they are only visible within the translation unit (source file) where they are defined
+namespace {
+[[maybe_unused]] int internalVar = 42; // internal linkage variable
+} // namespace
+
 // function that takes an array as a parameter
 // noexcept specification is used to indicate that the function does not throw exceptions
 //   compiler can optimize the code better
@@ -201,6 +208,22 @@ int main() {
     [[maybe_unused]] bool is_floating_point = std::is_floating_point<float>::value; // check if type is floating point
     [[maybe_unused]] bool is_pointer = std::is_pointer<int *>::value;               // check if type is pointer
     [[maybe_unused]] bool is_reference = std::is_reference<int &>::value;           // check if type is reference
+
+    // static assertions
+    static_assert(std::is_integral<int>::value, "int is not an integral type");                // compile-time assertion
+    static_assert(std::is_floating_point<float>::value, "float is not a floating point type"); // compile-time assertion
+    static_assert(std::is_pointer<int *>::value, "int* is not a pointer type");                // compile-time assertion
+
+    // using declarations and using statements
+    using std::cout;                      // using declaration for std::cout
+    using std::endl;                      // using declaration for std::endl
+    using namespace std::string_literals; // using statement for string literals
+    using namespace std::chrono_literals; // using statement for chrono literals
+
+    // namespace alias
+    namespace ns = std::chrono;                                        // namespace alias for std::chrono
+    [[maybe_unused]] ns::duration<int> d1 = ns::seconds(5);            // duration of 5 seconds
+    [[maybe_unused]] ns::duration<double> d2 = ns::milliseconds(1000); // duration of 1000 milliseconds
 
     std::cout << "Hello, C++ Playground!" << std::endl;
     return EXIT_SUCCESS;
