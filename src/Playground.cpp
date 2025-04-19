@@ -175,7 +175,7 @@ int main() {
     //   const, constexpr, inline, volatile
     //   for local variables, global variables, attributes, non-static methods, function parameters, and return values
 
-    // type deduction with auto and decltype
+    // type deduction with auto and decltype (auto type deduction is identical to template parameter type deduction)
     [[maybe_unused]] int tdi{5};       // explicit type from declaration
     [[maybe_unused]] auto tdi2 = 5;    // type deduction from explicit initializer (auto, removes qualifiers and references)
     [[maybe_unused]] decltype(tdi2) r; // type deduction from expression evaluation at compile time (decltype, keeps qualifiers and references)
@@ -236,8 +236,11 @@ int main() {
     //   a closure is an object that captures the environment in which it was created
     //   the closure can be seen as struct on the stack with the captured variables as values or references
     [[maybe_unused]] auto noop = [] {}; // lambda function with no parameters and deduced return type "void" (no parentheses and no arrow operator)
-    auto lambda = [](int x) -> long { return x * 2; }; // lambda function that takes an integer and returns its double as long
-    [[maybe_unused]] long result = lambda(5);          // call lambda function with argument 5
+    auto lambda = [](int x) -> long { return x * 2; };         // lambda function that takes an integer and returns its double as long
+    [[maybe_unused]] long result = lambda(5);                  // call lambda function with argument 5
+    constexpr auto add = [](auto x, auto y) { return x + y; }; // generic lambda function that takes two arguments and returns their sum (C++14)
+    add(4, 5);                                                 // evaluate the lambda function at compile time
+    add(i, i);                                                 // evaluate the lambda function at runtime
 
     // Generated class member functions by the compiler:
     //     C++ 03 :
