@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 4.0)
 
 # Status messages for important global definitions
-message(STATUS "C++ Playground Unittests")
+message(STATUS "C++ Playground Tests")
 message(STATUS "Using source path ${CMAKE_CURRENT_SOURCE_DIR}")
 
 # Search for required packages using MODULE mode

@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "Account.h"
-#include "Distance.h"
+#include "distance/Distance.h"
 
 using namespace banking;
 using namespace unit;
