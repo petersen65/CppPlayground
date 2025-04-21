@@ -1,5 +1,3 @@
-#include <memory>
-
 #include "Account.h"
 
 namespace banking {
@@ -8,6 +6,7 @@ class Account : public IAccount {
   public:
     Account(double balance); // conversion constructor
     Account(int id, double balance);
+    virtual ~Account() = default; // virtual destructor
 
     operator double() const; // conversion operator
 
@@ -23,23 +22,23 @@ class Account : public IAccount {
 };
 
 // internal implementation of ISavingsAccount
-class SavingsAccount final : public Account, public ISavingsAccount {
-  public:
-    SavingsAccount(int id, double balance, double interestRate);
+// class SavingsAccount final : public Account, public ISavingsAccount {
+//   public:
+//     SavingsAccount(int id, double balance, double interestRate);
 
-    void applyInterest();
+//     void applyInterest();
 
-  private:
-    double interestRate;
-};
+//   private:
+//     double interestRate;
+// };
 
 // factory function to create an account
 std::shared_ptr<IAccount> createAccount(int id, double balance) { return std::make_shared<Account>(id, balance); }
 
 // factory function to create a savings account
-std::shared_ptr<ISavingsAccount> createSavingsAccount(int id, double balance, double interestRate) {
-    return std::make_shared<SavingsAccount>(id, balance, interestRate);
-}
+// std::shared_ptr<ISavingsAccount> createSavingsAccount(int id, double balance, double interestRate) {
+//     return std::make_shared<SavingsAccount>(id, balance, interestRate);
+// }
 
 // constructors and operators for Account
 Account::Account(double balance) : Account(0, balance) {}
@@ -53,6 +52,6 @@ void Account::deposit(double amount) { balance += amount; }
 void Account::withdraw(double amount) { balance -= amount; }
 
 // constructors and methods for SavingsAccount
-SavingsAccount::SavingsAccount(int id, double balance, double interestRate) : Account{id, balance}, interestRate{interestRate} {}
-void SavingsAccount::applyInterest() { balance += balance * interestRate; }
+// SavingsAccount::SavingsAccount(int id, double balance, double interestRate) : Account{id, balance}, interestRate{interestRate} {}
+// void SavingsAccount::applyInterest() { balance += balance * interestRate; }
 } // namespace banking
