@@ -1,5 +1,3 @@
-#include <gtest/gtest.h>
-
 namespace cpp_playground {
 namespace testing {
 namespace {}

@@ -243,21 +243,28 @@ int main() {
     add(i, i);                                                 // evaluate the lambda function at runtime
 
     // Generated class member functions by the compiler:
-    //     C++ 03 :
-    //     1) Implicitly-declared Constructor with no args declared as defaulted (generated only if no constructor is declared by user)
-    //     2) Implicitly-declared Copy Constructor (generated only if 5, 6 not declared by user)
-    //     3) Implicitly-declared Copy Assignment operator (generated only if 5, 6 not declared by user)
-    //     4) Implicitly-declared Destructor declared as defaulted (generated if no destructor is declared by user)
+    //   C++ 03 :
+    //   1) Implicitly-declared Constructor with no args declared as defaulted (generated only if no constructor is declared by user)
+    //   2) Implicitly-declared Copy Constructor (generated only if 5, 6 not declared by user)
+    //   3) Implicitly-declared Copy Assignment operator (generated only if 5, 6 not declared by user)
+    //   4) Implicitly-declared Destructor declared as defaulted (generated if no destructor is declared by user)
     //
-    //     Since C++ 11:
-    //     5) Move Constructor (generated only if 2, 3, 4, 6 not declared by user)
-    //     6) Move Assignment Operator (generated only if 2, 3, 4, 5 not declared by user)
+    //   Since C++ 11:
+    //   5) Move Constructor (generated only if 2, 3, 4, 6 not declared by user)
+    //   6) Move Assignment Operator (generated only if 2, 3, 4, 5 not declared by user)
 
     // In C++11,
-    //     a) Implicitly-declared Copy Constructor: deprecated if the class has a user-declared copy assignment operator or a user-declared destructor
-    //     b) Implicitly-declared Copy Assignment operator: see (a)
-    //     c) For user-declared Copy/Move Constructors and user-declared Copy/Move Assignments, always declare both Constructors and Assignments
-    //     d) In practice, implicit destructors are noexcept unless the class is "poisoned" by a base or member whose destructor is noexcept(false)
+    //   a) Implicitly-declared Copy Constructor: deprecated if the class has a user-declared copy assignment operator or a user-declared destructor
+    //   b) Implicitly-declared Copy Assignment operator: see (a)
+    //   c) For user-declared Copy/Move Constructors and user-declared Copy/Move Assignments, always declare both Constructors and Assignments
+    //   d) In practice, implicit destructors are noexcept unless the class is "poisoned" by a base or member whose destructor is noexcept(false)
+
+    // Smart pointers
+    //   std::unique_ptr: exclusive ownership of a resource (no copy, only move)
+    //   std::shared_ptr: shared ownership of a resource (reference counting)
+    std::unique_ptr<int> uptr = std::make_unique<int>(42);
+    std::shared_ptr account = createAccount(1, 100.0);
+    account->deposit(50.0);
 
     std::cout << "Hello, C++ Playground!" << std::endl;
     return EXIT_SUCCESS;

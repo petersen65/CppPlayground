@@ -11,9 +11,8 @@ find_package(Threads MODULE REQUIRED)
 # Declare targets, source files, and dependencies
 set(TARGET_APPLICATION "cpp_playground")
 set(SOURCECODE_FILES "Playground.cpp" "Distance.cpp")
-set(DEPENDENCIES "Threads::Threads" "acciflib")
+set(DEPENDENCIES "Threads::Threads" "acclib")
 
 # Main executable that contains the binary target
 add_executable(${TARGET_APPLICATION} ${SOURCECODE_FILES})
-target_include_directories(${TARGET_APPLICATION} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 target_link_libraries(${TARGET_APPLICATION} PRIVATE ${DEPENDENCIES})
