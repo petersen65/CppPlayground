@@ -18,7 +18,8 @@ set(DEPENDENCIES "Threads::Threads")
 
 set(TARGET_TEST_LIBRARY "acctestlib")
 set(SOURCECODE_TEST_FILES "test/AccountTest.cpp")
-set(TEST_DEPENDENCIES "GTest::gtest" "GTest::gmock")
+set(TEST_DEPENDENCIES "")
+get_target_property(GTEST_INCLUDE_DIRECTORIES "GTest::gtest" INTERFACE_INCLUDE_DIRECTORIES)
 
 # Interface
 add_library(${TARGET_INTERFACE_LIBRARY} INTERFACE)
@@ -26,11 +27,11 @@ target_include_directories(${TARGET_INTERFACE_LIBRARY} INTERFACE "interface")
 
 # Library
 add_library(${TARGET_LIBRARY} ${SOURCECODE_FILES})
-target_link_libraries(${TARGET_LIBRARY} PUBLIC ${TARGET_INTERFACE_LIBRARY})
-target_link_libraries(${TARGET_LIBRARY} PRIVATE ${DEPENDENCIES})
+target_link_libraries(${TARGET_LIBRARY} PUBLIC ${TARGET_INTERFACE_LIBRARY} PRIVATE ${DEPENDENCIES})
 
 # Test
 if(${BUILD_TESTING})
   add_library(${TARGET_TEST_LIBRARY} OBJECT ${SOURCECODE_TEST_FILES})
-  target_link_libraries(${TARGET_TEST_LIBRARY} PRIVATE ${TARGET_LIBRARY} ${TEST_DEPENDENCIES})
+  target_include_directories(${TARGET_TEST_LIBRARY} PRIVATE ${GTEST_INCLUDE_DIRECTORIES})
+  target_link_libraries(${TARGET_TEST_LIBRARY} PRIVATE ${TARGET_LIBRARY} PRIVATE ${TEST_DEPENDENCIES})
 endif()

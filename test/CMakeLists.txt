@@ -11,8 +11,8 @@ find_package(GTest MODULE REQUIRED)
 
 # Declare target, source files, and dependencies
 set(TARGET_TESTS "cpp_playground_test")
-set(SOURCECODE_FILES "PlaygroundTest.cpp")
-set(TEST_DEPENDENCIES "GTest::gtest_main" "acctestlib")
+set(SOURCECODE_FILES "")
+set(TEST_DEPENDENCIES "GTest::gtest_main" "GTest::gmock" "acctestlib")
 set(DEPENDENCIES "Threads::Threads")
 
 # Test executable that contains the binary target
