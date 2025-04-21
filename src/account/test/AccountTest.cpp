@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
-namespace cpp_playground {
+namespace banking {
 namespace testing {
 namespace {}
 } // namespace testing
-} // namespace cpp_playground
+} // namespace banking

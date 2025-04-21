@@ -181,7 +181,7 @@ int main() {
     [[maybe_unused]] decltype(tdi2) r; // type deduction from expression evaluation at compile time (decltype, keeps qualifiers and references)
 
     // runtime type information (RTTI)
-    typedef Account Acc;
+    typedef IAccount Acc;
     using AccPtr = Acc *;
     using AccRef = Acc &;
     [[maybe_unused]] const std::type_info &ti = typeid(Acc); // get type information at runtime

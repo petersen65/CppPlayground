@@ -44,6 +44,7 @@ message(STATUS "Number of CPU cores ${NPROC}")
 message(STATUS "Operating system name ${CMAKE_HOST_SYSTEM_NAME}")
 
 # Include sub-projects
+add_subdirectory("src/account")
 add_subdirectory("src")
 
 # Include test-packages and configure unit tests

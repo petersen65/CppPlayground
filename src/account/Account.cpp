@@ -34,7 +34,7 @@ class SavingsAccount final : public Account, public ISavingsAccount {
 };
 
 // factory function to create an account
-std::shared_ptr<IAccount> createAccount(int id, double balance) { std::make_shared<Account>(id, balance); }
+std::shared_ptr<IAccount> createAccount(int id, double balance) { return std::make_shared<Account>(id, balance); }
 
 // factory function to create a savings account
 std::shared_ptr<ISavingsAccount> createSavingsAccount(int id, double balance, double interestRate) {
