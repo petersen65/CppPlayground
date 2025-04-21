@@ -1,20 +1,24 @@
 #pragma once
 
+#include <memory>
+
 namespace banking {
-class Account {
+// public interface for account management
+class IAccount {
   public:
-    Account(double balance); // conversion constructor
-    Account(int id, double balance);
-
-    operator double() const; // conversion operator
-
-    int getId() const;
-    double getBalance() const;
-    void deposit(double amount);
-    void withdraw(double amount);
-
-  private:
-    int id;
-    double balance;
+    virtual int getId() const = 0;
+    virtual double getBalance() const = 0;
+    virtual void deposit(double amount) = 0;
+    virtual void withdraw(double amount) = 0;
 };
+
+// public interface for savings account management
+class ISavingsAccount : public IAccount {
+  public:
+    virtual void applyInterest() = 0;
+};
+
+// factory functions to create accounts 
+std::shared_ptr<IAccount> createAccount(int id, double balance);
+std::shared_ptr<ISavingsAccount> createSavingsAccount(int id, double balance, double interestRate);
 } // namespace banking
