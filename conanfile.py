@@ -16,6 +16,6 @@ class ConanRecipe(ConanFile):
         deps = CMakeDeps(self)
         deps.generate()
         toolchain = CMakeToolchain(self)
-        toolchain.blocks["cppstd"].values = {"cppstd": "23", "cppstd_extensions": "OFF"}
+        toolchain.blocks["cppstd"].values = {"cppstd": "26", "cppstd_extensions": "OFF"}
         toolchain.cache_variables["BUILD_TESTING"] = "ON"
         toolchain.generate()
