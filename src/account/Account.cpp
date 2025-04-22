@@ -6,15 +6,15 @@ class Account : public IAccount {
   public:
     Account(int id, double balance); // constructor
     Account(double balance);         // conversion constructor
-    virtual ~Account() = default;    // virtual destructor
+    ~Account() override = default;   // virtual destructor
 
     operator double() const; // conversion operator
 
     // IAccount interface
-    int getId() const;
-    double getBalance() const;
-    void deposit(double amount);
-    void withdraw(double amount);
+    int getId() const override final; // cannot be overridden by derived classes
+    double getBalance() const override;
+    void deposit(double amount) override;
+    void withdraw(double amount) override;
 
   protected:
     int id;
@@ -25,10 +25,10 @@ class Account : public IAccount {
 class SavingsAccount final : public Account, public ISavingsAccount {
   public:
     SavingsAccount(int id, double balance, double interestRate); // constructor
-    virtual ~SavingsAccount() = default;                         // virtual destructor
+    ~SavingsAccount() override = default;                        // virtual destructor
 
     // ISavingsAccount interface
-    void applyInterest();
+    void applyInterest() override;
 
   private:
     double interestRate;

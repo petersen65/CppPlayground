@@ -267,6 +267,25 @@ int main() {
     std::shared_ptr account = createAccount(1, 100.0);
     account->deposit(50.0);
 
+    // Constructor execution order:
+    //   1. Base class members constructors executed in order of declaration
+    //   2. Base class constructor body executed
+    //   3. Current class members constructors executed in order of declaration
+    //   4. Current class constructor body executed
+
+    // Destructor execution order:
+    //   1. Current class destructor body executed
+    //   2. Current class members destructors executed in reverse order of declaration
+    //   3. Base class destructor body executed
+    //   4. Base class members destructors executed in reverse order of declaration
+
+    // Virtual destructors:
+    //   1. If a destructor of a class, from which other classes will later be derived, 
+    //      is not declared with the keyword virtual, undefined behavior may result.
+    //   2. If an object of a base class is deleted via a pointer or reference in this case, 
+    //      typically only the destructor of the base class is invoked, 
+    //      and none of the other destructors in the derived hierarchy are called.
+
     std::cout << "Hello, C++ Playground!" << std::endl;
     return EXIT_SUCCESS;
 }
