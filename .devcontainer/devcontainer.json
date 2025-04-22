@@ -12,8 +12,17 @@
 			"LLVM_VERSION": "20"
 		}
 	},
+	"mounts": [
+		"source=${env:HOME}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock,target=/run/1password/agent.sock,type=bind"
+	],
+	"remoteEnv": {
+		"SSH_AUTH_SOCK": "/run/1password/agent.sock"
+	},
 	"customizations": {
 		"vscode": {
+			"settings": {
+				"git.enableCommitSigning": true
+			},
 			"extensions": [
 				"vscode-icons-team.vscode-icons",
 				"github.copilot",
