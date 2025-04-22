@@ -14,7 +14,7 @@ class IAccount {
 };
 
 // public interface for savings account management
-class ISavingsAccount : public IAccount {
+class ISavingsAccount {
   public:
     virtual ~ISavingsAccount() = default;
     virtual void applyInterest() = 0;
@@ -22,5 +22,5 @@ class ISavingsAccount : public IAccount {
 
 // factory functions to create accounts
 std::shared_ptr<IAccount> createAccount(int id, double balance);
-// std::shared_ptr<ISavingsAccount> createSavingsAccount(int id, double balance, double interestRate);
+std::shared_ptr<ISavingsAccount> createSavingsAccount(int id, double balance, double interestRate);
 } // namespace banking
