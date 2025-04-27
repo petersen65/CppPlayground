@@ -51,6 +51,38 @@ void j([[maybe_unused]] const int &ref = {}) {
     // ref is a reference to an integer
 }
 
+// function template that has type parameters
+template <typename T> T add1(T a, T b) { return a + b; }
+
+// function template that demonstrates the use of "auto"
+// auto is a keyword that allows the compiler to deduce the type of a variable at compile time
+// auto uses the same type deduction rules as template parameter type deduction
+auto add2(auto a, auto b) { return a + b; }
+// is equivalent to
+template <typename T1, typename T2> auto add2(T1 a, T2 b) { return a + b; }
+
+// function template that has a non-type parameter
+template <typename T, int N> T add3(const T (&arr)[N]) {
+    T sum{}; // default initialization of sum to zero
+
+    for (int i = 0; i < N; ++i) {
+        sum += arr[i]; // arr is a reference to a constant C array of size N
+    }
+
+    return sum;
+}
+
+// universal reference function template and type deduction
+template <typename T> void universalRef(T &&) {
+    if constexpr (std::is_lvalue_reference_v<T>) {
+        // param is an lvalue reference
+        std::cout << "Lvalue reference" << std::endl;
+    } else {
+        // param is an rvalue reference
+        std::cout << "Rvalue reference" << std::endl;
+    }
+}
+
 int main() {
     // integer types
     [[maybe_unused]] int i = 42;                     // 32-bit signed integer
@@ -140,7 +172,7 @@ int main() {
     ps = nullptr;                                   // avoid dangling pointer
 
     // lvalue (short for locator value) refers to an expression that has a name and a location (left side of an assignment)
-    // xvalue (short for expiring value) refers to an expression that is about to be moved from (has name/location but is about to be moved, std::move(x))
+    // xvalue (short for expiring value) refers to an expression that is about to be moved (has name/location but is about to be moved, std::move(x))
     // prvalue (short for pure right-hand value) refers to an expression that is temporary (no name/location, 42, std::string("Hello"))
     // rvalue (short for right-hand value) refers to an expression that is temporary or expiring (right side of an assignment, prvalue + xvalue)
     // glvalue (short for generalized lvalue) refers to an expression that has a name and a location but might not be assignable (lvalue + xvalue)
@@ -260,7 +292,7 @@ int main() {
     //   c) For user-declared Copy/Move Constructors and user-declared Copy/Move Assignments, always declare both Constructors and Assignments
     //   d) In practice, implicit destructors are noexcept unless the class is "poisoned" by a base or member whose destructor is noexcept(false)
 
-    // Smart pointers
+    // smart pointers
     //   std::unique_ptr: exclusive ownership of a resource (no copy, only move)
     //   std::shared_ptr: shared ownership of a resource (reference counting)
     std::unique_ptr<int> uptr = std::make_unique<int>(42);
@@ -280,11 +312,55 @@ int main() {
     //   4. Base class members destructors executed in reverse order of declaration
 
     // Virtual destructors:
-    //   1. If a destructor of a class, from which other classes will later be derived, 
+    //   1. If a destructor of a class, from which other classes will later be derived,
     //      is not declared with the keyword virtual, undefined behavior may result.
-    //   2. If an object of a base class is deleted via a pointer or reference in this case, 
-    //      typically only the destructor of the base class is invoked, 
+    //   2. If an object of a base class is deleted via a pointer or reference in this case,
+    //      typically only the destructor of the base class is invoked,
     //      and none of the other destructors in the derived hierarchy are called.
+
+    // universal references (perfect forwarding)
+    //   1. Universal references are a special case of rvalue references
+    //   2. They are created when a template type parameter is declared as T&&
+    //   3. They can bind to both lvalues and rvalues
+    //   4. They are used to implement perfect forwarding
+    //   5. lvalue references T& combined with universal references T&& become lvalue references
+    //      T&& is becoming T& &&, which collapses to T& due to reference collapsing rules
+    //   6. rvalue references T&& combined with universal references T&& become rvalue references
+    //      T&& is becoming T&& &&, which collapses to T&& due to reference collapsing rules
+    //   7. lvalues provided to a universal reference are passed as lvalues references
+    //      T deduces to T& and T&& is becoming T& &&, which collapses to T&
+    //   8. rvalues provided to a universal reference are passed as rvalues references
+    //      T deduces to non-reference T and T&& stays T&&
+    //
+    // C++ has rules for reference collapsing, which dictate how multiple reference qualifiers combine. The rules are:
+    //   - T& & becomes T&
+    //   - T& && becomes T&
+    //   - T&& & becomes T&
+    //   - T&& && becomes T&&
+    //
+    // It's important to differentiate between universal references and rvalue references:
+    //   - Rvalue References: Written as T&& when T is a concrete type (not a template parameter)
+    //     Rvalue references can only bind to rvalues
+    //   - Universal References: Also written as T&&, but T is a template parameter
+    //     Universal references can bind to both lvalues and rvalues, depending on how T is deduced
+
+    int lv = 42;      // lvalue (has a name and a location in memory)
+    int &lvr = lv;    // content of lvr is a lvalue reference to the variable lv
+                      // the variable lvr itself is an lvalue (has a name and a location in memory)
+    int *lvptr = &lv; // content of lvptr is a pointer to the variable lv
+                      // the variable lvptr itself is an lvalue (has a name and a location in memory)
+    int &&rvr = 42;   // int &&: this declares rvr as storing a rvalue reference to a temporary value 42 (extends lifetime of the temporary)
+                      // the content of rvr is a rvalue reference to the temporary value 42
+                      // the variable rvr itself is an lvalue (has a name and a location in memory)
+
+    // universalRef just considers the value type of the parameter at compile time (lvalue or rvalue), not the content of the parameter
+    universalRef(lv);             // lvalue reference
+    universalRef(lvr);            // lvalue reference
+    universalRef(std::move(lvr)); // rvalue reference (std::move(lvr) is an xvalue, name/location but about to be moved)
+    universalRef(42);             // rvalue reference
+    universalRef(rvr);            // lvalue reference
+    universalRef(lvptr);          // lvalue reference
+    universalRef(*lvptr);         // lvalue reference
 
     std::cout << "Hello, C++ Playground!" << std::endl;
     return EXIT_SUCCESS;
