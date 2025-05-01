@@ -7,7 +7,7 @@
 using namespace banking;
 
 namespace banking_mock {
-class MockAccount : public IAccount {
+class AccountMock : public IAccount {
     public:
     MOCK_METHOD(int, getId, (), (const, override));
     MOCK_METHOD(double, getBalance, (), (const, override));

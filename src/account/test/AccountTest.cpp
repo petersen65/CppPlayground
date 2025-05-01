@@ -10,7 +10,7 @@ namespace testing {
 namespace {
 TEST(MockSuite, MockAccount) {
     // Prepare
-    MockAccount account;
+    AccountMock account;
 
     EXPECT_CALL(account, getId).Times(Exactly(1));
     EXPECT_CALL(account, getBalance).Times(Exactly(1));

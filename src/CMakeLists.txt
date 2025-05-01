@@ -11,7 +11,7 @@ find_package(Threads MODULE REQUIRED)
 # Declare targets, source files, and dependencies
 set(TARGET_APPLICATION "cpp_playground")
 set(SOURCECODE_FILES "Playground.cpp" "distance/Distance.cpp")
-set(DEPENDENCIES "Threads::Threads" "acclib")
+set(DEPENDENCIES "Threads::Threads" "accountlib")
 
 # Main executable that contains the binary target
 add_executable(${TARGET_APPLICATION} ${SOURCECODE_FILES})

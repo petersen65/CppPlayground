@@ -10,13 +10,13 @@ find_package(Threads MODULE REQUIRED)
 find_package(GTest MODULE REQUIRED)
 
 # Declare targets, source files, and dependencies
-set(TARGET_INTERFACE_LIBRARY "acciflib")
+set(TARGET_INTERFACE_LIBRARY "account_iflib")
 
-set(TARGET_LIBRARY "acclib")
+set(TARGET_LIBRARY "accountlib")
 set(SOURCECODE_FILES "Account.cpp")
 set(DEPENDENCIES "Threads::Threads")
 
-set(TARGET_TEST_LIBRARY "acctestlib")
+set(TARGET_TEST_LIBRARY "account_testlib")
 set(SOURCECODE_TEST_FILES "test/AccountTest.cpp")
 set(TEST_DEPENDENCIES "")
 get_target_property(GTEST_INCLUDE_DIRECTORIES "GTest::gtest" INTERFACE_INCLUDE_DIRECTORIES)
