@@ -41,32 +41,32 @@ class ProducerConsumer final : public IProducerConsumer<ITEM, STATUS> {
     bool isFinished{false};
     bool isCancelled{false};
     STATUS lastStatus{};
-    std::shared_timed_mutex sharedOrExclusiveAccess;
+    mutable std::shared_timed_mutex sharedOrExclusiveAccess;
     std::condition_variable_any itemCondition;
     std::queue<ITEM> itemQueue;
 };
 
 template <typename ITEM, typename STATUS>
 inline bool ProducerConsumer<ITEM, STATUS>::finished() const {
-    std::shared_lock reader(sharedOrExclusiveAccess);
+    std::shared_lock reader{sharedOrExclusiveAccess};
     return isFinished;
 }
 
 template <typename ITEM, typename STATUS>
 inline bool ProducerConsumer<ITEM, STATUS>::cancelled() const {
-    std::shared_lock reader(sharedOrExclusiveAccess);
+    std::shared_lock reader{sharedOrExclusiveAccess};
     return isCancelled;
 }
 
 template <typename ITEM, typename STATUS>
 inline STATUS ProducerConsumer<ITEM, STATUS>::status() const {
-    std::shared_lock reader(sharedOrExclusiveAccess);
+    std::shared_lock reader{sharedOrExclusiveAccess};
     return lastStatus;
 }
 
 template <typename ITEM, typename STATUS>
 inline size_t ProducerConsumer<ITEM, STATUS>::count() const {
-    std::shared_lock reader(sharedOrExclusiveAccess);
+    std::shared_lock reader{sharedOrExclusiveAccess};
     return itemQueue.size();
 }
 } // namespace producer_consumer
