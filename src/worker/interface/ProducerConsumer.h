@@ -1,3 +1,8 @@
+/// @file ProducerConsumer.h
+/// @brief C++ templates which implement thread-safe producer-consumer patterns
+/// @date 2025
+/// @author Michael Petersen
+
 #pragma once
 
 #include <chrono>
@@ -6,9 +11,15 @@
 #include <shared_mutex>
 
 namespace producer_consumer {
-enum class ConsumerResult { Available, Timeout, Finished };
+/// @brief For a producer of items, the interest of the consumer in the next item is defined through this enumeration
 enum class ProducerResult { Taken, Cancelled };
 
+/// @brief For a consumer of items, the availability of the next produced item is defined through this enumeration    
+enum class ConsumerResult { Available, Timeout, Finished };
+
+/// @brief Abstract class that provides the contract for a producer-consumer pattern implementation
+/// @tparam ITEM    Typename for produced and consumed items
+/// @tparam STATUS  Status typename when the producer finishes its work or the consumer cancels its interest
 template <typename ITEM, typename STATUS>
 class IProducerConsumer {
   public:
@@ -24,6 +35,9 @@ class IProducerConsumer {
     virtual size_t count() const = 0;
 };
 
+/// @brief Producer-Consumer pattern implemented as a thread-safe C++ class template
+/// @tparam ITEM    Typename for produced and consumed items
+/// @tparam STATUS  Status typename when the producer finishes its work or the consumer cancels its interest
 template <typename ITEM, typename STATUS>
 class ProducerConsumer final : public IProducerConsumer<ITEM, STATUS> {
   public:
@@ -48,6 +62,11 @@ class ProducerConsumer final : public IProducerConsumer<ITEM, STATUS> {
     std::queue<ITEM> itemQueue;
 };
 
+/// @brief 
+/// @tparam ITEM 
+/// @tparam STATUS 
+/// @param item 
+/// @return 
 template <typename ITEM, typename STATUS>
 inline ProducerResult ProducerConsumer<ITEM, STATUS>::produce(ITEM &&item) {
     std::unique_lock writer{sharedOrExclusiveAccess};
