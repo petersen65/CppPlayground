@@ -1,7 +1,10 @@
+#include <algorithm>
 #include <array>
 #include <chrono>
 #include <iostream>
+#include <iterator>
 #include <map>
+#include <ranges>
 #include <string>
 #include <vector>
 
@@ -52,17 +55,24 @@ void j([[maybe_unused]] const int &ref = {}) {
 }
 
 // function template that has type parameters
-template <typename T> T add1(T a, T b) { return a + b; }
+template <typename T>
+T add1(T a, T b) {
+    return a + b;
+}
 
 // function template that demonstrates the use of "auto"
 // auto is a keyword that allows the compiler to deduce the type of a variable at compile time
 // auto uses the same type deduction rules as template parameter type deduction
 auto add2(auto a, auto b) { return a + b; }
 // is equivalent to
-template <typename T1, typename T2> auto add2(T1 a, T2 b) { return a + b; }
+template <typename T1, typename T2>
+auto add2(T1 a, T2 b) {
+    return a + b;
+}
 
 // function template that has a non-type parameter
-template <typename T, int N> T add3(const T (&arr)[N]) {
+template <typename T, int N>
+T add3(const T (&arr)[N]) {
     T sum{}; // default initialization of sum to zero
 
     for (int i = 0; i < N; ++i) {
@@ -73,7 +83,8 @@ template <typename T, int N> T add3(const T (&arr)[N]) {
 }
 
 // universal reference function template and type deduction
-template <typename T> void universalRef(T &&) {
+template <typename T>
+void universalRef(T &&) {
     if constexpr (std::is_lvalue_reference_v<T>) {
         // param is an lvalue reference
         std::cout << "Lvalue reference" << std::endl;
@@ -81,6 +92,27 @@ template <typename T> void universalRef(T &&) {
         // param is an rvalue reference
         std::cout << "Rvalue reference" << std::endl;
     }
+}
+
+// after C++17, the auto keyword makes the function declaration to a function template and hence "&&range" contains a universal reference
+// this is named: C++20 abbreviated function template
+// the function can accept both lvalues (variables) and rvalues (temporaries from expressions)
+// the parameter "range" itself is an lvalue (has a name and a location in memory)
+// the parameter "range" contains either an lvalue reference or an rvalue reference, depending on the type of the argument passed to the function
+// the C++20 abbreviated function template will print out any “range” of things (containers, initializer lists, anything with begin()/end()) without making copies
+void printRange(auto &&range) {
+    // auto&& item is again a forwarding reference, but now deduced from whatever type *it returns when iterating
+    //   if range is an lvalue container of T (e.g. std::vector<int>), each *it is an lvalue of type T&
+    //     deduction sees auto&& binding to a T&, so auto becomes T& and auto&& collapses to T&
+    //   if range is an rvalue container of T (e.g. std::vector<int>{}), each *it is an rvalue of type T&&
+    //     deduction sees auto&& binding to a T&&, so auto becomes T&& and auto&& collapses to T&&
+    // auto&& as a forwarding reference allows the processing of an item without copying it
+
+    for (auto &&item : range) {
+        std::cout << item << " ";
+    }
+
+    std::cout << std::endl;
 }
 
 int main() {
@@ -322,7 +354,7 @@ int main() {
     //   1. Universal references are a special case of rvalue references
     //   2. They are created when a template type parameter is declared as T&&
     //   3. They can bind to both lvalues and rvalues
-    //   4. They are used to implement perfect forwarding
+    //   4. They are used to implement perfect forwarding of arguments without unnecessary copies
     //   5. lvalue references T& combined with universal references T&& become lvalue references
     //      T&& is becoming T& &&, which collapses to T& due to reference collapsing rules
     //   6. rvalue references T&& combined with universal references T&& become rvalue references
@@ -330,7 +362,7 @@ int main() {
     //   7. lvalues provided to a universal reference are passed as lvalues references
     //      T deduces to T& and T&& is becoming T& &&, which collapses to T&
     //   8. rvalues provided to a universal reference are passed as rvalues references
-    //      T deduces to non-reference T and T&& stays T&&
+    //      T deduces to T&& and T&& is becoming T&& &&, which collapses to T&&
     //
     // C++ has rules for reference collapsing, which dictate how multiple reference qualifiers combine. The rules are:
     //   - T& & becomes T&
@@ -361,6 +393,25 @@ int main() {
     universalRef(rvr);            // lvalue reference
     universalRef(lvptr);          // lvalue reference
     universalRef(*lvptr);         // lvalue reference
+
+    // iterators and ranges
+    //   - iterators are objects that point to elements in a container
+    //   - iterators provide a way to traverse the elements in a container
+    //   - ranges describe a sequence of elements in a container
+    //   - ranges provide a way to work with a sequence of elements in a container
+    //   - both iterators and ranges represent a sequence of elements
+    std::vector<int> data{1, 2, 3, 4, 5};
+
+    // alogorithms
+    //   - algorithms are functions that operate on ranges and iterators
+    //   - algorithms provide a way to manipulate the elements in a container
+    std::for_each(data.begin(), data.end(), [](int &n) { n *= 2; });                 // apply a function to every element from an iterator pair
+    std::copy(data.begin(), data.end(), std::ostream_iterator<int>{std::cout, " "}); // copy the elements from an iterator pair to the output stream
+    std::sort(data.begin(), data.end());                                             // sort the elements from the iterator pair
+    std::ranges::reverse(data);                                                      // reverse the elements from the range
+    std::ranges::sort(data);                                                         // sort the elements from the range
+    std::ranges::for_each(data, [](int &n) { n *= 2; });                             // apply a function to every element from the range
+    std::ranges::copy(data, std::ostream_iterator<int>{std::cout, " "});             // copy the elements from the range to the output stream
 
     std::cout << "Hello, C++ Playground!" << std::endl;
     return EXIT_SUCCESS;
