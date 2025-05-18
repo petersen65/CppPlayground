@@ -82,9 +82,9 @@ T add3(const T (&arr)[N]) {
     return sum;
 }
 
-// universal reference function template and type deduction
+// forwarding reference function template and type deduction
 template <typename T>
-void universalRef(T &&) {
+void forwardingRef(T &&) {
     if constexpr (std::is_lvalue_reference_v<T>) {
         // param is an lvalue reference
         std::cout << "Lvalue reference" << std::endl;
@@ -94,12 +94,13 @@ void universalRef(T &&) {
     }
 }
 
-// after C++17, the auto keyword makes the function declaration to a function template and hence "&&range" contains a universal reference
+// after C++17, the auto keyword makes the function declaration to a function template and hence "&&range" contains a forwarding reference
 // this is named: C++20 abbreviated function template
 // the function can accept both lvalues (variables) and rvalues (temporaries from expressions)
 // the parameter "range" itself is an lvalue (has a name and a location in memory)
 // the parameter "range" contains either an lvalue reference or an rvalue reference, depending on the type of the argument passed to the function
-// the C++20 abbreviated function template will print out any “range” of things (containers, initializer lists, anything with begin()/end()) without making copies
+// the C++20 abbreviated function template will print out any “range” of things (containers, initializer lists, anything with begin()/end()) without making
+// copies
 void printRange(auto &&range) {
     // auto&& item is again a forwarding reference, but now deduced from whatever type *it returns when iterating
     //   if range is an lvalue container of T (e.g. std::vector<int>), each *it is an lvalue of type T&
@@ -350,18 +351,18 @@ int main() {
     //      typically only the destructor of the base class is invoked,
     //      and none of the other destructors in the derived hierarchy are called.
 
-    // universal references (perfect forwarding)
-    //   1. Universal references are a special case of rvalue references
+    // Forwarding references (perfect forwarding)
+    //   1. Forwarding references are a special case of rvalue references
     //   2. They are created when a template type parameter is declared as T&&
     //   3. They can bind to both lvalues and rvalues
     //   4. They are used to implement perfect forwarding of arguments without unnecessary copies
-    //   5. lvalue references T& combined with universal references T&& become lvalue references
+    //   5. lvalue references T& combined with forwarding references T&& become lvalue references
     //      T&& is becoming T& &&, which collapses to T& due to reference collapsing rules
-    //   6. rvalue references T&& combined with universal references T&& become rvalue references
+    //   6. rvalue references T&& combined with forwarding references T&& become rvalue references
     //      T&& is becoming T&& &&, which collapses to T&& due to reference collapsing rules
-    //   7. lvalues provided to a universal reference are passed as lvalues references
+    //   7. lvalues provided to a forwarding reference are passed as lvalues references
     //      T deduces to T& and T&& is becoming T& &&, which collapses to T&
-    //   8. rvalues provided to a universal reference are passed as rvalues references
+    //   8. rvalues provided to a forwarding reference are passed as rvalues references
     //      T deduces to T&& and T&& is becoming T&& &&, which collapses to T&&
     //
     // C++ has rules for reference collapsing, which dictate how multiple reference qualifiers combine. The rules are:
@@ -370,11 +371,28 @@ int main() {
     //   - T&& & becomes T&
     //   - T&& && becomes T&&
     //
-    // It's important to differentiate between universal references and rvalue references:
+    // It's important to differentiate between forwarding references and rvalue references:
     //   - Rvalue References: Written as T&& when T is a concrete type (not a template parameter)
     //     Rvalue references can only bind to rvalues
-    //   - Universal References: Also written as T&&, but T is a template parameter
-    //     Universal references can bind to both lvalues and rvalues, depending on how T is deduced
+    //   - Forwarding References: Also written as T&&, but T is a function template parameter
+    //     Forwarding references can bind to both lvalues and rvalues, depending on how T is deduced
+    //
+    // Forwarding references are used in function templates to allow perfect forwarding. In C++, a parameter of type T&& is only a forwarding reference when type
+    // deduction is involved — i.e., when T is deduced from a function call context and not explicitly specified.
+    //
+    // Where are forwarding references possible?
+    //   - Lambda parameters: auto lambda = [](auto&& x) { /* ... */ };
+    //   - Function template parameters: template<typename T> void func(T&& x) { /* ... */ }
+    //   - Perfect forwarding in forwarding constructors of class templates:
+    //       template <typename T>
+    //       struct Wrapper {
+    //         T value;
+    //
+    //         template <typename U>
+    //         Wrapper(U&& val) : value(std::forward<U>(val)) {}
+    //       };
+    //  - auto&& in ranged for-loops: for (auto&& x : someRange) { ... }
+    //  - abbreviated function templates (C++20): void func(auto&& x) { /* ... */ }
 
     int lv = 42;      // lvalue (has a name and a location in memory)
     int &lvr = lv;    // content of lvr is a lvalue reference to the variable lv
@@ -385,14 +403,14 @@ int main() {
                       // the content of rvr is a rvalue reference to the temporary value 42
                       // the variable rvr itself is an lvalue (has a name and a location in memory)
 
-    // universalRef just considers the value type of the parameter at compile time (lvalue or rvalue), not the content of the parameter
-    universalRef(lv);             // lvalue reference
-    universalRef(lvr);            // lvalue reference
-    universalRef(std::move(lvr)); // rvalue reference (std::move(lvr) is an xvalue, name/location but about to be moved)
-    universalRef(42);             // rvalue reference
-    universalRef(rvr);            // lvalue reference
-    universalRef(lvptr);          // lvalue reference
-    universalRef(*lvptr);         // lvalue reference
+    // forwardingRef just considers the value type of the parameter at compile time (lvalue or rvalue), not the content of the parameter
+    forwardingRef(lv);             // lvalue reference
+    forwardingRef(lvr);            // lvalue reference
+    forwardingRef(std::move(lvr)); // rvalue reference (std::move(lvr) is an xvalue, name/location but about to be moved)
+    forwardingRef(42);             // rvalue reference
+    forwardingRef(rvr);            // lvalue reference
+    forwardingRef(lvptr);          // lvalue reference
+    forwardingRef(*lvptr);         // lvalue reference
 
     // iterators and ranges
     //   - iterators are objects that point to elements in a container

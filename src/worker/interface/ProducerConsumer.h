@@ -11,13 +11,15 @@
 #include <shared_mutex>
 
 namespace producer_consumer {
-/// @brief For a producer of items, the interest of the consumer in the next item is defined through this enumeration
+/// @brief For a producer of items, the interest of the consumer in the next item is defined through this enumeration.
+/// @details The producer is either able to produce an item or it can be informed that no consumer is interested in the item anymore.
 enum class ProducerResult { Taken, Cancelled };
 
-/// @brief For a consumer of items, the availability of the next produced item is defined through this enumeration    
+/// @brief For a consumer of items, the availability of the next produced item is defined through this enumeration.
+/// @details The consumer can receive an item, it can time out waiting for the next item, or it can be informed that the producer has finished its work.
 enum class ConsumerResult { Available, Timeout, Finished };
 
-/// @brief Abstract class that provides the contract for a producer-consumer pattern implementation
+/// @brief Abstract class that provides the contract for a producer-consumer pattern implementation.
 /// @tparam ITEM    Typename for produced and consumed items
 /// @tparam STATUS  Status typename when the producer finishes its work or the consumer cancels its interest
 template <typename ITEM, typename STATUS>
@@ -35,7 +37,7 @@ class IProducerConsumer {
     virtual size_t count() const = 0;
 };
 
-/// @brief Producer-Consumer pattern implemented as a thread-safe C++ class template
+/// @brief Producer-Consumer pattern implemented as a thread-safe C++ class template.
 /// @tparam ITEM    Typename for produced and consumed items
 /// @tparam STATUS  Status typename when the producer finishes its work or the consumer cancels its interest
 template <typename ITEM, typename STATUS>
@@ -62,11 +64,11 @@ class ProducerConsumer final : public IProducerConsumer<ITEM, STATUS> {
     std::queue<ITEM> itemQueue;
 };
 
-/// @brief 
-/// @tparam ITEM 
-/// @tparam STATUS 
-/// @param item 
-/// @return 
+/// @brief
+/// @tparam ITEM
+/// @tparam STATUS
+/// @param item
+/// @return
 template <typename ITEM, typename STATUS>
 inline ProducerResult ProducerConsumer<ITEM, STATUS>::produce(ITEM &&item) {
     std::unique_lock writer{sharedOrExclusiveAccess};
