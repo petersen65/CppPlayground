@@ -20,8 +20,8 @@ enum class ProducerResult { Taken, Cancelled };
 enum class ConsumerResult { Available, Timeout, Finished };
 
 /// @brief Abstract class that provides the contract for a producer-consumer pattern implementation.
-/// @tparam ITEM    Typename for produced and consumed items
-/// @tparam STATUS  Status typename when the producer finishes its work or the consumer cancels its interest
+/// @tparam ITEM   Typename for produced and consumed items
+/// @tparam STATUS Status typename when the producer finishes its work or the consumer cancels its interest
 template <typename ITEM, typename STATUS>
 class IProducerConsumer {
   public:
@@ -38,8 +38,8 @@ class IProducerConsumer {
 };
 
 /// @brief Producer-Consumer pattern implemented as a thread-safe C++ class template.
-/// @tparam ITEM    Typename for produced and consumed items
-/// @tparam STATUS  Status typename when the producer finishes its work or the consumer cancels its interest
+/// @tparam ITEM   Typename for produced and consumed items
+/// @tparam STATUS Status typename when the producer finishes its work or the consumer cancels its interest
 template <typename ITEM, typename STATUS>
 class ProducerConsumer final : public IProducerConsumer<ITEM, STATUS> {
   public:
@@ -64,11 +64,12 @@ class ProducerConsumer final : public IProducerConsumer<ITEM, STATUS> {
     std::queue<ITEM> itemQueue;
 };
 
-/// @brief
-/// @tparam ITEM
-/// @tparam STATUS
-/// @param item
-/// @return
+/// @brief Produce an item for any consumer.
+/// @details The item is moved into the queue. If the producer is finished or the consumer is cancelled, the item is not added to the queue.
+/// @tparam ITEM   Typename for produced and consumed items
+/// @tparam STATUS Status typename when the producer finishes its work or the consumer cancels its interest
+/// @param item    Item will be moved to the consumer
+/// @return        Consumer will take the item or is not interested (item not moved in this case)
 template <typename ITEM, typename STATUS>
 inline ProducerResult ProducerConsumer<ITEM, STATUS>::produce(ITEM &&item) {
     std::unique_lock writer{sharedOrExclusiveAccess};
@@ -82,6 +83,13 @@ inline ProducerResult ProducerConsumer<ITEM, STATUS>::produce(ITEM &&item) {
     return ProducerResult::Taken;
 }
 
+/// @brief Produce an item for any consumer and finish the producer.
+/// @details The item is moved into the queue. If the producer is finished or the consumer is cancelled, the item is not added to the queue.
+/// @tparam ITEM   Typename for produced and consumed items
+/// @tparam STATUS Status typename when the producer finishes its work or the consumer cancels its interest
+/// @param item    Item will be moved to the consumer
+/// @param status  Detailed status from the producer why it finished its work
+/// @return        Consumer will take the item or is not interested (item not moved in this case) 
 template <typename ITEM, typename STATUS>
 inline ProducerResult ProducerConsumer<ITEM, STATUS>::produceAndFinish(ITEM &&item, STATUS status) {
     std::unique_lock writer{sharedOrExclusiveAccess};
