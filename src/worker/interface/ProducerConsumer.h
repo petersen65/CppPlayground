@@ -89,7 +89,7 @@ inline ProducerResult ProducerConsumer<ITEM, STATUS>::produce(ITEM &&item) {
 /// @tparam STATUS Status typename when the producer finishes its work or the consumer cancels its interest
 /// @param item    Item will be moved to the consumer
 /// @param status  Detailed status from the producer why it finished its work
-/// @return        Consumer will take the item or is not interested (item not moved in this case) 
+/// @return        Consumer will take the item or is not interested anymore
 template <typename ITEM, typename STATUS>
 inline ProducerResult ProducerConsumer<ITEM, STATUS>::produceAndFinish(ITEM &&item, STATUS status) {
     std::unique_lock writer{sharedOrExclusiveAccess};
@@ -105,6 +105,14 @@ inline ProducerResult ProducerConsumer<ITEM, STATUS>::produceAndFinish(ITEM &&it
     return ProducerResult::Taken;
 }
 
+/// @brief Consume an existing item from a producer or wait for one until it is produced or a timeout happened.
+/// @details The item is moved from the queue. If the producer is finished or the consumer is cancelled, the item is not removed from the queue.
+///          If the timeout is zero, the consumer will wait infinitely until an item is available.
+/// @tparam ITEM   Typename for produced and consumed items
+/// @tparam STATUS Status typename when the producer finishes its work or the consumer cancels its interest
+/// @param item    Item to be consumed that will be removed from the queue
+/// @param timeout Duration in milliseconds to wait for an item to be produced or zero for an infinite wait
+/// @return        Producer has produced an item, the consumer timed out waiting for an item, or the producer has finished its work
 template <typename ITEM, typename STATUS>
 inline ConsumerResult ProducerConsumer<ITEM, STATUS>::consume(ITEM *item, std::chrono::milliseconds timeout) {
     std::unique_lock writer{sharedOrExclusiveAccess};
@@ -113,6 +121,13 @@ inline ConsumerResult ProducerConsumer<ITEM, STATUS>::consume(ITEM *item, std::c
         return ConsumerResult::Finished;
     }
 
+    // Wait for a new item to be produced or for a producer to finish or for a consumer to cancel:
+    //   1. Release the unique lock 'writer' and wait for 'itemCondition.notify*()' (atomic operation)
+    //   2. If 'itemCondition.wait*()' wakes up internally (notify, spurious), acquire unique lock 'writer'
+    //   3. Call lamba and evaluate its return value while holding the unique lock 'writer'
+    //   4. If lambda returns false, release the unique lock 'writer' and wait again (atomic operation)
+    //   5. If lambda returns true, keep the unique lock 'writer' acquired and continue
+    //   6. If 'itemCondition.wait*()' wakes up externally (timeout), keep unique lock 'writer' acquired and continue
     if (timeout.count() > 0) {
         itemCondition.wait_for(writer, timeout, [this] { return !itemQueue.empty() || isFinished || isCancelled; });
     } else {
@@ -132,6 +147,10 @@ inline ConsumerResult ProducerConsumer<ITEM, STATUS>::consume(ITEM *item, std::c
     return ConsumerResult::Timeout;
 }
 
+/// @brief This producer-consumer instance is finished and no items will be produced any more.
+/// @tparam ITEM   Typename for produced and consumed items
+/// @tparam STATUS Status typename when the producer finishes its work or the consumer cancels its interest
+/// @param status
 template <typename ITEM, typename STATUS>
 inline void ProducerConsumer<ITEM, STATUS>::finishProducer(STATUS status) {
     std::unique_lock writer{sharedOrExclusiveAccess};
@@ -140,6 +159,10 @@ inline void ProducerConsumer<ITEM, STATUS>::finishProducer(STATUS status) {
     itemCondition.notify_all();
 }
 
+/// @brief This producer-consumer instance is cancelled and no consumer is interested in new items anymore.
+/// @tparam ITEM   Typename for produced and consumed items
+/// @tparam STATUS Status typename when the producer finishes its work or the consumer cancels its interest
+/// @param status
 template <typename ITEM, typename STATUS>
 inline void ProducerConsumer<ITEM, STATUS>::cancelConsumer(STATUS status) {
     std::unique_lock writer{sharedOrExclusiveAccess};
@@ -148,24 +171,41 @@ inline void ProducerConsumer<ITEM, STATUS>::cancelConsumer(STATUS status) {
     itemCondition.notify_all();
 }
 
+/// @brief Retrieve whether this producer-consumer instance is finished.
+/// @tparam ITEM   Typename for produced and consumed items
+/// @tparam STATUS Status typename when the producer finishes its work or the consumer cancels its interest
+/// @return This producer-consumer instance is finished
 template <typename ITEM, typename STATUS>
 inline bool ProducerConsumer<ITEM, STATUS>::finished() const {
     std::shared_lock reader{sharedOrExclusiveAccess};
     return isFinished;
 }
 
+/// @brief Retrieve whether this producer-consumer instance is cancelled.
+/// @tparam ITEM   Typename for produced and consumed items
+/// @tparam STATUS Status typename when the producer finishes its work or the consumer cancels its interest
+/// @return This producer-consumer instance is cancelled
 template <typename ITEM, typename STATUS>
 inline bool ProducerConsumer<ITEM, STATUS>::cancelled() const {
     std::shared_lock reader{sharedOrExclusiveAccess};
     return isCancelled;
 }
 
+/// @brief Retrieve status from last produce or consume operation.
+/// @details The status is only valid if this producer-consumer instance is finished or cancelled.
+/// @tparam ITEM   Typename for produced and consumed items
+/// @tparam STATUS Status typename when the producer finishes its work or the consumer cancels its interest
+/// @return
 template <typename ITEM, typename STATUS>
 inline STATUS ProducerConsumer<ITEM, STATUS>::status() const {
     std::shared_lock reader{sharedOrExclusiveAccess};
     return lastStatus;
 }
 
+/// @brief Retrieve the number of currently stored items from all producers.
+/// @tparam ITEM   Typename for produced and consumed items
+/// @tparam STATUS Status typename when the producer finishes its work or the consumer cancels its interest
+/// @return Number of currently stored items
 template <typename ITEM, typename STATUS>
 inline size_t ProducerConsumer<ITEM, STATUS>::count() const {
     std::shared_lock reader{sharedOrExclusiveAccess};
