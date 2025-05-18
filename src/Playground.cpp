@@ -402,7 +402,7 @@ int main() {
     //   - both iterators and ranges represent a sequence of elements
     std::vector<int> data{1, 2, 3, 4, 5};
 
-    // alogorithms
+    // algorithms
     //   - algorithms are functions that operate on ranges and iterators
     //   - algorithms provide a way to manipulate the elements in a container
     std::for_each(data.begin(), data.end(), [](int &n) { n *= 2; });                 // apply a function to every element from an iterator pair

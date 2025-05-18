@@ -2,11 +2,11 @@
 cmake_minimum_required(VERSION 4.0)
 
 # Status messages for important global definitions
-message(STATUS "Logging Library")
+message(STATUS "Core Library")
 message(STATUS "Using source path ${CMAKE_CURRENT_SOURCE_DIR}")
 
 # Declare targets, source files, and dependencies
-set(TARGET_INTERFACE_LIBRARY "logging_iflib")
+set(TARGET_INTERFACE_LIBRARY "core_iflib")
 
 # Interface
 add_library(${TARGET_INTERFACE_LIBRARY} INTERFACE)

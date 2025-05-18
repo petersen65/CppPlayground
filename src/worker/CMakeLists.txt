@@ -13,7 +13,7 @@ set(TARGET_INTERFACE_LIBRARY "worker_iflib")
 
 set(TARGET_TEST_LIBRARY "worker_testlib")
 set(SOURCECODE_TEST_FILES "test/WorkerTest.cpp")
-set(TEST_DEPENDENCIES "logging_iflib")
+set(TEST_DEPENDENCIES "core_iflib")
 get_target_property(GTEST_INCLUDE_DIRECTORIES "GTest::gtest" INTERFACE_INCLUDE_DIRECTORIES)
 
 # Interface

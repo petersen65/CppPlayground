@@ -46,7 +46,7 @@ message(STATUS "Operating system name ${CMAKE_HOST_SYSTEM_NAME}")
 
 # Include sub-projects
 add_subdirectory("src/account")
-add_subdirectory("src/logging")
+add_subdirectory("src/core")
 add_subdirectory("src/worker")
 add_subdirectory("src")
 
