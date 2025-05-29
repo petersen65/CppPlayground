@@ -1,5 +1,5 @@
 {
-    "C_Cpp.default.compilerPath": "/opt/homebrew/bin/g++-14",
+    "C_Cpp.default.compilerPath": "/opt/homebrew/bin/g++-15",
     "files.associations": {
         "shared_mutex": "cpp",
         "chrono": "cpp"

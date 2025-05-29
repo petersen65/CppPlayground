@@ -1,7 +1,7 @@
 # CppPlayground
-C++ Playground
+C++ Playground for learning C++ topics
 
-### Ubuntu with Bash Command Prompt
+### Bash or Zsh Command Prompt
 cd CppPlayground
 rm -rf build CMakeUserPresets.json
 
