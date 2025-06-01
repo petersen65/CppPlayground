@@ -43,7 +43,6 @@ message(STATUS "Using C++ compiler ${CMAKE_CXX_COMPILER_ID}")
 message(STATUS "Using CPU architecture ${CMAKE_HOST_SYSTEM_PROCESSOR}")
 message(STATUS "Number of CPU cores ${NPROC}")
 message(STATUS "Operating system name ${CMAKE_HOST_SYSTEM_NAME}")
-message(STATUS "Shell used for executing commands ${CMAKE_SH}")
 
 # Include sub-projects
 add_subdirectory("src/account")
