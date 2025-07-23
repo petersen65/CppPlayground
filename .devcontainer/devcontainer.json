@@ -13,7 +13,7 @@
             "GO_VERSION": "1.24.5",
             "GO_ARCHITECTURE": "linux-amd64",
             "GCC_VERSION": "15",
-            "LLVM_VERSION": "21"
+            "LLVM_VERSION": "20"
         }
     },
     "runArgs": [
